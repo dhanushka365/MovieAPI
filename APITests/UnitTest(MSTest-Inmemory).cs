@@ -114,7 +114,7 @@ namespace APITests
             using (var context = new AppDbContext(options))
             {
                 
-                var movie = new Movie { Id = 9, Title = "Existing Movie", YearOfRelease = 2010, Genre = "Comedy" };
+                var movie = new Movie { Id = 19, Title = "Existing Movie", YearOfRelease = 2010, Genre = "Comedy" };
                 context.Movies.Add(movie);
                 context.SaveChanges();
                 var movieRepository = new MovieRepository(context);
@@ -122,11 +122,11 @@ namespace APITests
                 // Act
                 var patchDoc = new JsonPatchDocument<Movie>();
                 patchDoc.Replace(m => m.Title, "Updated Movie");
-                var result = movieController.PatchMovieAsync(9, patchDoc);
+                var result = movieController.PatchMovieAsync(19, patchDoc);
                 // Assert
                 Assert.IsNotNull(result);
                 //Assert.AreEqual(StatusCodes.Status204NoContent, ((NoContentResult)result).StatusCode);   
-                var updatedMovieInDb = context.Movies.Find(9);
+                var updatedMovieInDb = context.Movies.Find(19);
                 Assert.IsNotNull(updatedMovieInDb);
                 Assert.AreEqual("Updated Movie", updatedMovieInDb.Title);
             }

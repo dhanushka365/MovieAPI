@@ -53,13 +53,19 @@ namespace MovieAPI.Controllers
             {
                 return NotFound(); // Return a 404 Not Found response if the movie doesn't exist
             }
-            patchDocument.ApplyTo(existingMovie, (Microsoft.AspNetCore.JsonPatch.Adapters.IObjectAdapter)ModelState);
 
-            if (!ModelState.IsValid)
+            // Apply the patch document to the existing movie
+            patchDocument.ApplyTo(existingMovie);
+
+            if (!TryValidateModel(existingMovie))
             {
                 return BadRequest(ModelState); // Return a 400 Bad Request response if the patch is invalid
             }
+
+            // Save the changes to the database
             await _movieRepository.UpdateMovieAsync(existingMovie);
+
+            // Return a 200 OK response with the updated movie
             return Ok(existingMovie);
         }
 
